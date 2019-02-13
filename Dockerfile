@@ -6,12 +6,12 @@ RUN apt-get update && apt-get -y upgrade && apt-get install -y build-essential v
 
 WORKDIR /usr/src
 #ROOT
-RUN wget https://root.cern/download/root_v6.16.00.source.tar.gz
-RUN tar xfz root_v6.16.00.source.tar.gz
-RUN mkdir ROOT-builddir && cd ROOT-builddir && \
+RUN wget https://root.cern/download/root_v6.16.00.source.tar.gz && \
+	tar xfz root_v6.16.00.source.tar.gz && \
+	mkdir ROOT-builddir && \
+	cd ROOT-builddir && \
 	apt-get install -y cmake libx11-xcb-dev libxpm-dev libxft-dev libxext-dev python python-dev && \
-	cmake /usr/src/root-6.16.00/
-RUN cd ROOT-builddir && \
+	cmake /usr/src/root-6.16.00/ && \
 	cmake --build .
 #RUN /bin/bash -c "source /usr/src/ROOT-builddir/bin/thisroot.sh"
 ENV ROOTSYS /usr/src/ROOT-builddir
@@ -23,7 +23,8 @@ RUN apt-get install -y libncurses5-dev libbz2-dev liblzma-dev && \
 	tar jxf samtools-1.9.tar.bz2 && \
 	cd samtools-1.9 && \
 	./configure --prefix $(pwd) && \
-	make && make install
+	make && make install && \
+	ln -s /usr/src/samtools-1.9/samtools /usr/bin/samtools
 
 #cnvnator
 RUN git clone https://github.com/abyzovlab/CNVnator.git && \

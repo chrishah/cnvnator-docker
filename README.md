@@ -11,7 +11,7 @@ In detail, the image is set up with:
 
 Note that, since the image contains the full [ROOT](https://root.cern.ch/) package it is rather big, so initial download will take a while.
 
-To run [CNVnator](https://github.com/abyzovlab/CNVnator) you can do the following (this will mount the directory `/home/working` of the container to the current working directory on your local machine, and allow to you access files in this directory and any sub-directories):
+To run [CNVnator](https://github.com/abyzovlab/CNVnator) you can do the following (this will mount the directory `/home/working` of the container to the current working directory on your local machine, and allow you to access files in this directory and any sub-directories):
 ```bash
 $ docker run --rm -v $(pwd):/home/working -w /home/working chrishah/cnvnator-docker:v0.3.3 cnvnator
 ```

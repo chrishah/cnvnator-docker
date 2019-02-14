@@ -5,11 +5,9 @@ The image contains a full install of [CNVnator](https://github.com/abyzovlab/CNV
 
 In detail, the image is set up with:
  - Ubuntu 18.04
- - [ROOT](https://root.cern.ch/)
+ - [ROOT](https://root.cern.ch/) 6.16.00
  - samtools 1.9
  - CNVnator v0.3.3
-
-Note that, since the image contains the full [ROOT](https://root.cern.ch/) package it is rather big, so initial download will take a while.
 
 To run [CNVnator](https://github.com/abyzovlab/CNVnator) you can do the following (this will mount the directory `/home/working` of the container to the current working directory on your local machine, and allow you to access files in this directory and any sub-directories):
 ```bash

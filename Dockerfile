@@ -1,35 +1,46 @@
 FROM ubuntu:18.04
 
-MAINTAINER <christoph.hahn@tugraz.at>
+MAINTAINER Christoph Hahn <christoph.hahn@tugraz.at>
 
-RUN apt-get update && apt-get -y upgrade && apt-get install -y build-essential vim git wget
+RUN apt-get update && apt-get -y upgrade && apt-get install -y build-essential git wget \
+	zlib1g-dev libncurses5-dev libbz2-dev liblzma-dev libcurl3-dev \
+	libx11-xcb-dev libxft-dev && \
+	apt-get clean && apt-get purge && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /usr/src
+
 #ROOT
-RUN wget https://root.cern/download/root_v6.16.00.source.tar.gz && \
-	tar xfz root_v6.16.00.source.tar.gz && \
-	mkdir ROOT-builddir && \
-	cd ROOT-builddir && \
-	apt-get install -y cmake libx11-xcb-dev libxpm-dev libxft-dev libxext-dev python python-dev && \
-	cmake /usr/src/root-6.16.00/ && \
-	cmake --build .
+RUN wget https://root.cern/download/root_v6.16.00.Linux-ubuntu18-x86_64-gcc7.3.tar.gz && \
+        tar xfz root_v6.16.00.Linux-ubuntu18-x86_64-gcc7.3.tar.gz && \
+	rm root_v6.16.00.Linux-ubuntu18-x86_64-gcc7.3.tar.gz
+ENV ROOTSYS /usr/src/root
+ENV LD_LIBRARY_PATH /usr/src/root/lib
+
+#RUN wget https://root.cern/download/root_v6.16.00.source.tar.gz && \
+#	tar xfz root_v6.16.00.source.tar.gz && \
+#	mkdir ROOT-builddir && \
+#	cd ROOT-builddir && \
+#	apt-get install -y cmake libx11-xcb-dev libxpm-dev libxft-dev libxext-dev python python-dev && \
+#	cmake /usr/src/root-6.16.00/ && \
+#	cmake --build .
 #RUN /bin/bash -c "source /usr/src/ROOT-builddir/bin/thisroot.sh"
-ENV ROOTSYS /usr/src/ROOT-builddir
-ENV LD_LIBRARY_PATH /usr/src/ROOT-builddir/lib
+#ENV ROOTSYS /usr/src/ROOT-builddir
+#ENV LD_LIBRARY_PATH /usr/src/ROOT-builddir/lib
 
 #Samtools
-RUN apt-get install -y libncurses5-dev libbz2-dev liblzma-dev && \
-	wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 && \
+RUN wget https://github.com/samtools/samtools/releases/download/1.9/samtools-1.9.tar.bz2 && \
 	tar jxf samtools-1.9.tar.bz2 && \
+	rm samtools-1.9.tar.bz2 && \
 	cd samtools-1.9 && \
 	./configure --prefix $(pwd) && \
-	make && make install && \
+	make && \
 	ln -s /usr/src/samtools-1.9/samtools /usr/bin/samtools
 
 #cnvnator
 RUN git clone https://github.com/abyzovlab/CNVnator.git && \
 	cd CNVnator && \
+	git reset --soft cc24b2e1d424ab2e05132c66130477a93ff9841d && \
 	ln -s /usr/src/samtools-1.9 samtools && \
-	apt-get install -y libcurl3-dev && \
 	make
 ENV PATH="${PATH}:/usr/src/CNVnator/"
